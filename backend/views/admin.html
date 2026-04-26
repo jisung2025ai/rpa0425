@@ -17,8 +17,8 @@
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;padding:0}
 
 /* 헤더 */
-.header{background:linear-gradient(135deg,#1e1b3a 0%,#2a2050 100%);border-bottom:1px solid var(--border);padding:18px 32px;display:flex;align-items:center;justify-content:space-between}
-.header h1{font-size:18px;font-weight:700;color:var(--purple-light);display:flex;align-items:center;gap:10px}
+.header{background:linear-gradient(135deg,#1e1b3a 0%,#2a2050 100%);border-bottom:1px solid var(--border);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.header h1{font-size:17px;font-weight:700;color:var(--purple-light);display:flex;align-items:center;gap:10px}
 .header h1::before{content:'📊';font-size:20px}
 .header .meta{font-size:12px;color:var(--muted)}
 .last-update{font-size:11px;color:var(--muted);margin-top:3px}
@@ -27,12 +27,11 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 .container{max-width:1200px;margin:0 auto;padding:24px 20px}
 .top-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
 
 /* 카드 */
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
-.card h2{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
-.card h2 span{font-size:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px}
+.card h2{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.card h2 span{font-size:15px}
 
 /* 숫자 카드 */
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 22px;position:relative;overflow:hidden}
@@ -46,7 +45,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 .app-bar .name{font-size:12px;color:var(--text)}
 .app-bar .pct{font-size:12px;font-weight:700;color:var(--purple-light)}
 .bar-track{background:#1e1c35;border-radius:20px;height:8px;overflow:hidden}
-.bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--purple),var(--blue));transition:width 1s ease}
+.bar-fill{height:100%;border-radius:20px;transition:width 1s ease}
 .bar-fill.must{background:linear-gradient(90deg,#7c5bf7,#23d18b)}
 .bar-fill.opt{background:linear-gradient(90deg,#4ecdc4,#95a5fe)}
 
@@ -54,24 +53,23 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 .badge{display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:20px;margin-left:6px}
 .badge.must{background:#4a1f1f;color:#ff8f8f}
 .badge.opt{background:#1f2e4a;color:#7ab3ff}
-.badge.free{background:#1a3a2e;color:#4dbb8a}
 
 /* 체크리스트 */
 .chk-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
 .chk-row:last-child{border-bottom:none}
 .chk-bar{flex:1;background:#1e1c35;border-radius:10px;height:6px;overflow:hidden}
 .chk-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--purple),var(--green))}
-.chk-lbl{min-width:160px;color:var(--muted)}
+.chk-lbl{min-width:160px;color:var(--muted);font-size:11.5px}
 .chk-pct{min-width:42px;text-align:right;font-weight:700;color:var(--green)}
 
-/* 도구 파이 */
+/* 도구 목록 */
 .tool-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
 .tool-row{display:flex;align-items:center;gap:8px;font-size:12px}
 .tool-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .tool-name{flex:1;color:var(--text)}
 .tool-cnt{color:var(--purple-light);font-weight:700}
 
-/* 최근 제출 테이블 */
+/* 테이블 */
 .tbl{width:100%;border-collapse:collapse;font-size:11.5px}
 .tbl th{padding:8px 10px;text-align:left;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap}
 .tbl td{padding:7px 10px;border-bottom:1px solid #1e1c35;color:var(--text);vertical-align:middle}
@@ -80,23 +78,28 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 .icon-check{color:var(--green);font-size:13px}
 .icon-x{color:#4a4463;font-size:13px}
 
-/* 목표 태그 클라우드 */
-.goal-card{background:var(--purple-dim);border-radius:8px;padding:10px 12px;font-size:11.5px;color:#d0c8ff;line-height:1.6;margin-bottom:8px;position:relative}
-.goal-card .num{position:absolute;top:8px;right:10px;font-size:10px;color:var(--muted)}
+/* 목표 카드 */
+.goal-card{background:var(--purple-dim);border-radius:8px;padding:10px 14px;font-size:12px;color:#d0c8ff;line-height:1.6;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+.goal-card .quote{flex:1}
+.goal-card .author{font-size:10px;color:var(--muted);white-space:nowrap;padding-top:2px}
+.goals-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
-/* 갱신 버튼 */
-.refresh-btn{background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff;padding:8px 20px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
+/* 업무명 태그 */
+.task-tags{display:flex;flex-wrap:wrap;gap:7px}
+.task-tag{background:#1e1c35;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11.5px;color:var(--text)}
+.task-tag .cnt{color:var(--purple-light);font-size:10px;margin-left:4px}
+
+/* 버튼 */
+.refresh-btn{background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s}
 .refresh-btn:hover{opacity:.85}
-.export-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:8px;font-size:11px;cursor:pointer;font-family:inherit;margin-left:8px;transition:all .2s}
+.export-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:8px;font-size:11px;cursor:pointer;font-family:inherit;margin-left:8px;transition:all .2s}
 .export-btn:hover{border-color:var(--purple);color:var(--purple-light)}
 
-/* 로딩 */
-.loading{text-align:center;padding:60px;color:var(--muted);font-size:14px}
-.spinner{display:inline-block;width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
+/* 로딩 / 빈 상태 */
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:13px}
+.spinner{display:inline-block;width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* 빈 상태 */
-.empty{text-align:center;padding:40px;color:var(--muted);font-size:13px}
+.empty{text-align:center;padding:30px;color:var(--muted);font-size:12px}
 
 canvas{max-height:200px!important}
 </style>
@@ -119,7 +122,7 @@ canvas{max-height:200px!important}
       <div class="val" id="totalCount">-</div>
       <div class="lbl">총 제출 수</div>
     </div>
-    <div class="stat-card" style="--before-color:#23d18b">
+    <div class="stat-card">
       <div class="val" id="claudeRate" style="font-size:28px">-</div>
       <div class="lbl">Claude.ai 설치 완료율</div>
     </div>
@@ -135,45 +138,53 @@ canvas{max-height:200px!important}
 
   <!-- 앱 설치 + 도구 선택 -->
   <div class="grid2">
-    <div class="card">
+    <div class="card" style="margin-bottom:0">
       <h2><span>📱</span> 앱 설치 현황</h2>
       <div id="appBars"><div class="loading"><div class="spinner"></div><br>로딩 중...</div></div>
     </div>
-    <div class="card">
-      <h2><span>🛠️</span> 사용하고 싶은 도구 선택</h2>
+    <div class="card" style="margin-bottom:0">
+      <h2><span>🛠️</span> 사용하고 싶은 도구 선택 <span style="font-weight:400;font-size:10px;color:var(--muted)">(업무 입력한 행만 집계)</span></h2>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center">
         <canvas id="toolChart"></canvas>
         <div class="tool-list" id="toolList"></div>
       </div>
     </div>
   </div>
+  <div style="margin-bottom:16px"></div>
 
   <!-- 체크리스트 + CapCut 목적 -->
   <div class="grid2">
-    <div class="card">
+    <div class="card" style="margin-bottom:0">
       <h2><span>✅</span> 당일 준비 체크리스트 완료율</h2>
       <div id="checklistBars"><div class="empty">데이터 없음</div></div>
     </div>
-    <div class="card">
+    <div class="card" style="margin-bottom:0">
       <h2><span>🎬</span> CapCut 만들고 싶은 결과물</h2>
       <canvas id="ccChart"></canvas>
     </div>
   </div>
+  <div style="margin-bottom:16px"></div>
 
-  <!-- 시간별 제출 -->
-  <div class="card" style="margin-bottom:16px">
+  <!-- 날짜별 제출 -->
+  <div class="card">
     <h2><span>📈</span> 날짜별 제출 현황</h2>
-    <canvas id="timelineChart" style="max-height:140px!important"></canvas>
+    <canvas id="timelineChart" style="max-height:130px!important"></canvas>
   </div>
 
-  <!-- 목표 선언 -->
-  <div class="card" style="margin-bottom:16px">
-    <h2><span>🎯</span> 수강생 목표 선언</h2>
-    <div id="goalList"><div class="empty">아직 제출된 목표가 없습니다</div></div>
+  <!-- 자동화 업무명 -->
+  <div class="card">
+    <h2><span>⚙️</span> 수강생이 자동화하고 싶은 업무</h2>
+    <div class="task-tags" id="taskTags"><div class="empty">데이터 없음</div></div>
+  </div>
+
+  <!-- 목표 선언 — 전원 표시 [FIX #3] -->
+  <div class="card">
+    <h2><span>🎯</span> 수강생 목표 선언 <span id="goalCount" style="font-weight:400;color:var(--purple-light);font-size:11px"></span></h2>
+    <div class="goals-grid" id="goalList"><div class="empty" style="grid-column:1/-1">아직 제출된 목표가 없습니다</div></div>
   </div>
 
   <!-- 최근 제출 -->
-  <div class="card" style="margin-bottom:16px">
+  <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <h2 style="margin-bottom:0"><span>📋</span> 최근 제출 목록 (최대 10건)</h2>
       <div>
@@ -187,44 +198,65 @@ canvas{max-height:200px!important}
 </div>
 
 <script>
-const API = ''; // 같은 서버이므로 상대경로 사용
+const API = '';
 const COLORS = ['#7c5bf7','#23d18b','#ffd166','#ff6b6b','#4ecdc4','#95a5fe','#f7a35c'];
 
 let toolChart = null, ccChart = null, timelineChart = null;
 
+// [FIX #4] 날짜 포맷 헬퍼
+function fmtDate(isoDate) {
+  if (!isoDate) return '';
+  const d = new Date(isoDate);
+  return `${d.getMonth()+1}/${d.getDate()}`;
+}
+
+// [FIX #1] 날짜시각 포맷 헬퍼
+function fmtDateTime(isoStr) {
+  if (!isoStr) return '';
+  const d = new Date(isoStr);
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mi = String(d.getMinutes()).padStart(2,'0');
+  return `${mm}/${dd} ${hh}:${mi}`;
+}
+
 async function loadStats() {
+  document.getElementById('lastUpdate').textContent = '마지막 갱신: 갱신 중...';
   try {
     const r = await fetch(API + '/api/stats');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
 
     document.getElementById('lastUpdate').textContent = '마지막 갱신: ' + new Date().toLocaleTimeString('ko-KR');
 
+    // ── 총계 카드 ──────────────────────────────────────────────
+    document.getElementById('totalCount').textContent = d.total;
     if (d.total === 0) {
-      document.getElementById('totalCount').textContent = '0';
-      ['claudeRate','capCutRate','laptopRate'].forEach(id => {
-        document.getElementById(id).textContent = '-';
-      });
+      document.getElementById('claudeRate').textContent = '-';
+      document.getElementById('capCutRate').textContent = '-';
+      document.getElementById('laptopRate').textContent = '-';
       document.getElementById('appBars').innerHTML = '<div class="empty">아직 제출된 데이터가 없습니다</div>';
       document.getElementById('checklistBars').innerHTML = '<div class="empty">데이터 없음</div>';
-      document.getElementById('goalList').innerHTML = '<div class="empty">아직 제출된 목표가 없습니다</div>';
+      document.getElementById('goalList').innerHTML = '<div class="empty" style="grid-column:1/-1">아직 제출된 목표가 없습니다</div>';
       document.getElementById('recentTable').innerHTML = '<div class="empty">데이터 없음</div>';
+      document.getElementById('taskTags').innerHTML = '<div class="empty">데이터 없음</div>';
+      document.getElementById('goalCount').textContent = '';
       return;
     }
 
-    // 숫자 카드
-    document.getElementById('totalCount').textContent = d.total;
     document.getElementById('claudeRate').textContent = d.apps.claude + '%';
     document.getElementById('capCutRate').textContent = d.apps.capcut + '%';
     document.getElementById('laptopRate').textContent = d.checklist.laptop + '%';
 
-    // 앱 설치 바
+    // ── 앱 설치 바 ─────────────────────────────────────────────
     const appDefs = [
-      { key:'claude', label:'Claude.ai', type:'must' },
-      { key:'notebooklm', label:'NotebookLM', type:'must' },
-      { key:'capcut', label:'CapCut', type:'must' },
-      { key:'chrome', label:'크롬 브라우저', type:'must' },
-      { key:'gamma', label:'Gamma.app', type:'opt' },
-      { key:'clipsai', label:'Clipsai', type:'opt' },
+      { key:'claude',      label:'Claude.ai',    type:'must' },
+      { key:'notebooklm',  label:'NotebookLM',   type:'must' },
+      { key:'capcut',      label:'CapCut',        type:'must' },
+      { key:'chrome',      label:'크롬 브라우저', type:'must' },
+      { key:'gamma',       label:'Gamma.app',     type:'opt'  },
+      { key:'clipsai',     label:'Clipsai',       type:'opt'  },
     ];
     document.getElementById('appBars').innerHTML = appDefs.map(a => `
       <div class="app-bar">
@@ -232,69 +264,74 @@ async function loadStats() {
           <span class="name">${a.label}
             <span class="badge ${a.type}">${a.type==='must'?'필수':'선택'}</span>
           </span>
-          <span class="pct">${d.apps[a.key]}% <span style="color:var(--muted);font-weight:400;font-size:10px">(${d.apps[a.key+'_n']}명)</span></span>
+          <span class="pct">${d.apps[a.key]}%
+            <span style="color:var(--muted);font-weight:400;font-size:10px">(${d.apps[a.key+'_n']}명)</span>
+          </span>
         </div>
         <div class="bar-track"><div class="bar-fill ${a.type}" style="width:${d.apps[a.key]}%"></div></div>
       </div>
     `).join('');
 
-    // 도구 선택 파이차트
+    // ── 도구 선택 도넛차트 ────────────────────────────────────
+    // [FIX #6] destroy 후 canvas 재활용 문제 방지
+    if (toolChart) { toolChart.destroy(); toolChart = null; }
     if (d.tools && d.tools.length > 0) {
       const toolLabels = d.tools.map(t => t.tool);
-      const toolVals = d.tools.map(t => parseInt(t.cnt));
+      const toolVals   = d.tools.map(t => parseInt(t.cnt));
       document.getElementById('toolList').innerHTML = d.tools.map((t, i) => `
         <div class="tool-row">
-          <div class="tool-dot" style="background:${COLORS[i%COLORS.length]}"></div>
+          <div class="tool-dot" style="background:${COLORS[i % COLORS.length]}"></div>
           <span class="tool-name">${t.tool}</span>
           <span class="tool-cnt">${t.cnt}회</span>
         </div>
       `).join('');
-      if (toolChart) toolChart.destroy();
       toolChart = new Chart(document.getElementById('toolChart'), {
-        type:'doughnut',
-        data:{labels:toolLabels,datasets:[{data:toolVals,backgroundColor:COLORS,borderWidth:2,borderColor:'#22213a'}]},
-        options:{responsive:true,plugins:{legend:{display:false}},cutout:'68%'}
+        type: 'doughnut',
+        data: {
+          labels: toolLabels,
+          datasets: [{ data: toolVals, backgroundColor: COLORS, borderWidth: 2, borderColor: '#22213a' }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } }, cutout: '68%' }
       });
     } else {
-      document.getElementById('toolList').innerHTML = '<div class="empty" style="padding:20px">데이터 없음</div>';
+      document.getElementById('toolList').innerHTML = '<div class="empty" style="padding:20px">업무 미입력</div>';
     }
 
-    // CapCut 결과물 파이
+    // ── CapCut 결과물 바차트 ──────────────────────────────────
+    if (ccChart) { ccChart.destroy(); ccChart = null; }
     if (d.ccOutput && d.ccOutput.length > 0) {
-      if (ccChart) ccChart.destroy();
       ccChart = new Chart(document.getElementById('ccChart'), {
-        type:'bar',
-        data:{
-          labels: d.ccOutput.map(r => r.output.length > 12 ? r.output.substring(0,12)+'…' : r.output),
-          datasets:[{
-            data: d.ccOutput.map(r => parseInt(r.cnt)),
-            backgroundColor: COLORS,
-            borderRadius: 6
-          }]
+        type: 'bar',
+        data: {
+          labels: d.ccOutput.map(r => r.output.length > 14 ? r.output.substring(0,14)+'…' : r.output),
+          datasets: [{ data: d.ccOutput.map(r => parseInt(r.cnt)), backgroundColor: COLORS, borderRadius: 6 }]
         },
-        options:{
-          responsive:true,
-          plugins:{legend:{display:false}},
-          scales:{
-            x:{ticks:{color:'#8a87b0',font:{size:10}},grid:{color:'#1e1c35'}},
-            y:{ticks:{color:'#8a87b0',font:{size:10}},grid:{color:'#1e1c35'},beginAtZero:true}
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#8a87b0', font: { size: 10 } }, grid: { color: '#1e1c35' } },
+            // [FIX #1] y축 ticks 중복 제거
+            y: { ticks: { color: '#8a87b0', font: { size: 10 }, stepSize: 1 }, grid: { color: '#1e1c35' }, beginAtZero: true }
           }
         }
       });
     }
 
-    // 체크리스트
+    // ── 체크리스트 ───────────────────────────────────────────
     const chkDefs = [
-      {key:'laptop', label:'노트북 충전 + 충전기'},
-      {key:'chrome', label:'크롬 최신 업데이트'},
-      {key:'login', label:'AI 앱 로그인 확인'},
-      {key:'video', label:'영상·이미지 파일 준비'},
-      {key:'pdf', label:'PDF 문서 준비'},
-      {key:'worksheet', label:'워크시트 지참'},
-      {key:'tasks', label:'자동화 업무 사전 구상'},
+      { key:'laptop',    label:'노트북 충전 + 충전기' },
+      { key:'chrome',    label:'크롬 최신 업데이트' },
+      { key:'login',     label:'AI 앱 로그인 확인' },
+      { key:'video',     label:'영상·이미지 파일 준비' },
+      { key:'pdf',       label:'PDF 문서 준비' },
+      { key:'worksheet', label:'워크시트 지참' },
+      { key:'tasks',     label:'자동화 업무 사전 구상' },
     ];
+    // [FIX #9] null → 0 처리하되 빈 상태 구분
     document.getElementById('checklistBars').innerHTML = chkDefs.map(c => {
-      const pct = parseFloat(d.checklist[c.key]) || 0;
+      const raw = d.checklist[c.key];
+      const pct = raw != null ? parseFloat(raw) : 0;
       return `
         <div class="chk-row">
           <span class="chk-lbl">${c.label}</span>
@@ -304,45 +341,59 @@ async function loadStats() {
       `;
     }).join('');
 
-    // 타임라인
+    // ── 날짜별 타임라인 ──────────────────────────────────────
+    if (timelineChart) { timelineChart.destroy(); timelineChart = null; }
     if (d.timeline && d.timeline.length > 0) {
-      if (timelineChart) timelineChart.destroy();
       timelineChart = new Chart(document.getElementById('timelineChart'), {
-        type:'line',
-        data:{
-          labels: d.timeline.map(r => r.date),
-          datasets:[{
+        type: 'line',
+        data: {
+          // [FIX #4] ISO 날짜 → M/D 포맷
+          labels: d.timeline.map(r => fmtDate(r.date)),
+          datasets: [{
             data: d.timeline.map(r => parseInt(r.cnt)),
-            borderColor:'#7c5bf7',
-            backgroundColor:'rgba(124,91,247,0.15)',
-            fill:true, tension:.4,
-            pointBackgroundColor:'#7c5bf7',
-            pointRadius:4
+            borderColor: '#7c5bf7',
+            backgroundColor: 'rgba(124,91,247,0.15)',
+            fill: true, tension: .4,
+            pointBackgroundColor: '#7c5bf7',
+            pointRadius: 4
           }]
         },
-        options:{
-          responsive:true,
-          plugins:{legend:{display:false}},
-          scales:{
-            x:{ticks:{color:'#8a87b0',font:{size:10}},grid:{color:'#1e1c35'}},
-            y:{ticks:{color:'#8a87b0',font:{size:10}},grid:{color:'#1e1c35'},beginAtZero:true,ticks:{stepSize:1}}
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#8a87b0', font: { size: 10 } }, grid: { color: '#1e1c35' } },
+            // [FIX #1] ticks 중복 제거
+            y: { ticks: { color: '#8a87b0', font: { size: 10 }, stepSize: 1 }, grid: { color: '#1e1c35' }, beginAtZero: true }
           }
         }
       });
     }
 
-    // 목표 선언
-    if (d.recent && d.recent.some(r => r.personal_goal)) {
-      const goals = d.recent.filter(r => r.personal_goal).slice(0, 6);
-      document.getElementById('goalList').innerHTML = goals.map((r, i) => `
-        <div class="goal-card">
-          "${r.personal_goal}"
-          <span class="num">${r.name || '익명'}</span>
-        </div>
+    // ── 자동화 업무명 태그 ───────────────────────────────────
+    if (d.taskNames && d.taskNames.length > 0) {
+      document.getElementById('taskTags').innerHTML = d.taskNames.map(t => `
+        <span class="task-tag">${t.task_name}<span class="cnt">${t.cnt > 1 ? '×'+t.cnt : ''}</span></span>
       `).join('');
+    } else {
+      document.getElementById('taskTags').innerHTML = '<div class="empty">데이터 없음</div>';
     }
 
-    // 최근 제출 테이블
+    // ── 목표 선언 [FIX #3] — 전원 표시 ──────────────────────
+    if (d.goals && d.goals.length > 0) {
+      document.getElementById('goalCount').textContent = `(${d.goals.length}명)`;
+      document.getElementById('goalList').innerHTML = d.goals.map(r => `
+        <div class="goal-card">
+          <span class="quote">"${r.personal_goal}"</span>
+          <span class="author">${r.name || '익명'}</span>
+        </div>
+      `).join('');
+    } else {
+      document.getElementById('goalCount').textContent = '';
+      document.getElementById('goalList').innerHTML = '<div class="empty" style="grid-column:1/-1">아직 제출된 목표가 없습니다</div>';
+    }
+
+    // ── 최근 제출 테이블 ─────────────────────────────────────
     if (d.recent && d.recent.length > 0) {
       const ci = v => v ? '<span class="icon-check">✓</span>' : '<span class="icon-x">—</span>';
       document.getElementById('recentTable').innerHTML = `
@@ -351,12 +402,11 @@ async function loadStats() {
             <tr>
               <th>#</th><th>이름</th><th>이메일</th>
               <th>Claude</th><th>NLM</th><th>CapCut</th>
-              <th>충전기</th><th>로그인</th>
-              <th>제출시각</th>
+              <th>충전기</th><th>로그인</th><th>제출시각</th>
             </tr>
           </thead>
           <tbody>
-            ${d.recent.map((r, i) => `
+            ${d.recent.map(r => `
               <tr>
                 <td style="color:var(--muted)">${r.id}</td>
                 <td style="font-weight:600">${r.name || '—'}</td>
@@ -366,7 +416,8 @@ async function loadStats() {
                 <td style="text-align:center">${ci(r.app_capcut)}</td>
                 <td style="text-align:center">${ci(r.check_laptop)}</td>
                 <td style="text-align:center">${ci(r.check_login)}</td>
-                <td style="color:var(--muted);font-size:10.5px">${new Date(r.submitted_kst).toLocaleString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}</td>
+                <!-- [FIX #4] 직접 포맷 변환 -->
+                <td style="color:var(--muted);font-size:10.5px">${fmtDateTime(r.submitted_kst)}</td>
               </tr>
             `).join('')}
           </tbody>

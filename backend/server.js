@@ -3,7 +3,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const { Pool } = require('pg');
 const path = require('path');
-const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // ── 미들웨어 ──────────────────────────────────────────────────
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({
-  origin: '*',  // GitHub Pages 도메인 허용
+  origin: '*',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type']
 }));
@@ -34,7 +33,7 @@ async function initDB() {
         name VARCHAR(100),
         email VARCHAR(200),
         phone VARCHAR(50),
-        
+
         -- 앱 설치 체크
         app_claude BOOLEAN DEFAULT false,
         app_notebooklm BOOLEAN DEFAULT false,
@@ -42,31 +41,31 @@ async function initDB() {
         app_gamma BOOLEAN DEFAULT false,
         app_clipsai BOOLEAN DEFAULT false,
         app_chrome BOOLEAN DEFAULT false,
-        
+
         -- 자동화 업무 1
         task1_name TEXT,
         task1_current TEXT,
         task1_pain TEXT,
         task1_tool VARCHAR(50),
-        
+
         -- 자동화 업무 2
         task2_name TEXT,
         task2_current TEXT,
         task2_pain TEXT,
         task2_tool VARCHAR(50),
-        
+
         -- 자동화 업무 3
         task3_name TEXT,
         task3_current TEXT,
         task3_pain TEXT,
         task3_tool VARCHAR(50),
-        
+
         -- 실습 소재
         material_nb_docs TEXT,
         material_nb_goal TEXT,
         material_cc_files TEXT,
         material_cc_output VARCHAR(100),
-        
+
         -- 체크리스트
         check_laptop BOOLEAN DEFAULT false,
         check_chrome BOOLEAN DEFAULT false,
@@ -75,10 +74,10 @@ async function initDB() {
         check_pdf BOOLEAN DEFAULT false,
         check_worksheet BOOLEAN DEFAULT false,
         check_tasks BOOLEAN DEFAULT false,
-        
+
         -- 목표
         personal_goal TEXT,
-        
+
         submitted_at TIMESTAMPTZ DEFAULT NOW(),
         ip_address VARCHAR(50),
         user_agent TEXT
@@ -121,9 +120,13 @@ app.post('/api/submit', async (req, res) => {
       d.name || null, d.email || null, d.phone || null,
       !!d.app_claude, !!d.app_notebooklm, !!d.app_capcut,
       !!d.app_gamma, !!d.app_clipsai, !!d.app_chrome,
-      d.task1_name || null, d.task1_current || null, d.task1_pain || null, d.task1_tool || null,
-      d.task2_name || null, d.task2_current || null, d.task2_pain || null, d.task2_tool || null,
-      d.task3_name || null, d.task3_current || null, d.task3_pain || null, d.task3_tool || null,
+      // [FIX #8] task_name이 비었으면 tool도 null로 저장
+      d.task1_name || null, d.task1_current || null, d.task1_pain || null,
+      d.task1_name ? (d.task1_tool || null) : null,
+      d.task2_name || null, d.task2_current || null, d.task2_pain || null,
+      d.task2_name ? (d.task2_tool || null) : null,
+      d.task3_name || null, d.task3_current || null, d.task3_pain || null,
+      d.task3_name ? (d.task3_tool || null) : null,
       d.material_nb_docs || null, d.material_nb_goal || null,
       d.material_cc_files || null, d.material_cc_output || null,
       !!d.check_laptop, !!d.check_chrome, !!d.check_login,
@@ -145,8 +148,21 @@ app.get('/api/stats', async (req, res) => {
     const total = await pool.query('SELECT COUNT(*) as cnt FROM submissions');
     const totalCount = parseInt(total.rows[0].cnt);
 
+    // [FIX #2] total=0일 때도 모든 필드를 포함한 구조 반환
     if (totalCount === 0) {
-      return res.json({ total: 0, apps: {}, tools: {}, checklist: {}, recent: [] });
+      return res.json({
+        total: 0,
+        apps: {
+          claude: 0, notebooklm: 0, capcut: 0, gamma: 0, clipsai: 0, chrome: 0,
+          claude_n: 0, notebooklm_n: 0, capcut_n: 0, gamma_n: 0, clipsai_n: 0, chrome_n: 0
+        },
+        tools: [],
+        ccOutput: [],
+        checklist: { laptop: 0, chrome: 0, login: 0, video: 0, pdf: 0, worksheet: 0, tasks: 0 },
+        timeline: [],
+        recent: [],
+        goals: []
+      });
     }
 
     // 앱 설치 현황
@@ -167,14 +183,17 @@ app.get('/api/stats', async (req, res) => {
       FROM submissions
     `);
 
-    // 도구 선택 분포
+    // [FIX #7] 도구 통계: task_name이 있는 행만 집계 (NULL tool 제외)
     const tools = await pool.query(`
       SELECT tool, COUNT(*) as cnt FROM (
-        SELECT task1_tool as tool FROM submissions WHERE task1_tool IS NOT NULL AND task1_tool != ''
+        SELECT task1_tool as tool FROM submissions
+          WHERE task1_name IS NOT NULL AND task1_name != '' AND task1_tool IS NOT NULL
         UNION ALL
-        SELECT task2_tool FROM submissions WHERE task2_tool IS NOT NULL AND task2_tool != ''
+        SELECT task2_tool FROM submissions
+          WHERE task2_name IS NOT NULL AND task2_name != '' AND task2_tool IS NOT NULL
         UNION ALL
-        SELECT task3_tool FROM submissions WHERE task3_tool IS NOT NULL AND task3_tool != ''
+        SELECT task3_tool FROM submissions
+          WHERE task3_name IS NOT NULL AND task3_name != '' AND task3_tool IS NOT NULL
       ) t GROUP BY tool ORDER BY cnt DESC
     `);
 
@@ -206,7 +225,7 @@ app.get('/api/stats', async (req, res) => {
       GROUP BY date ORDER BY date
     `);
 
-    // 최근 제출 (5건)
+    // 최근 제출 (10건)
     const recent = await pool.query(`
       SELECT id, name, email,
         app_claude, app_notebooklm, app_capcut,
@@ -216,6 +235,25 @@ app.get('/api/stats', async (req, res) => {
       FROM submissions ORDER BY submitted_at DESC LIMIT 10
     `);
 
+    // [FIX #3] 목표 선언: recent에서 뽑지 않고 별도 쿼리 — 전원 목표 반환
+    const goals = await pool.query(`
+      SELECT id, name, personal_goal
+      FROM submissions
+      WHERE personal_goal IS NOT NULL AND personal_goal != ''
+      ORDER BY submitted_at DESC
+    `);
+
+    // 자동화 업무명 목록 (강사 참고용)
+    const taskNames = await pool.query(`
+      SELECT task_name, COUNT(*) as cnt FROM (
+        SELECT task1_name as task_name FROM submissions WHERE task1_name IS NOT NULL AND task1_name != ''
+        UNION ALL
+        SELECT task2_name FROM submissions WHERE task2_name IS NOT NULL AND task2_name != ''
+        UNION ALL
+        SELECT task3_name FROM submissions WHERE task3_name IS NOT NULL AND task3_name != ''
+      ) t GROUP BY task_name ORDER BY cnt DESC LIMIT 20
+    `);
+
     res.json({
       total: totalCount,
       apps: apps.rows[0],
@@ -223,7 +261,9 @@ app.get('/api/stats', async (req, res) => {
       ccOutput: ccOutput.rows,
       checklist: chk.rows[0],
       timeline: timeline.rows,
-      recent: recent.rows
+      recent: recent.rows,
+      goals: goals.rows,        // [FIX #3] 전체 목표 별도 반환
+      taskNames: taskNames.rows // 신규: 업무명 집계
     });
   } catch (err) {
     console.error('통계 오류:', err);
@@ -241,8 +281,14 @@ app.get('/api/responses', async (req, res) => {
 
     const result = await pool.query('SELECT * FROM submissions ORDER BY submitted_at DESC');
 
-    // CSV 생성
-    const headers = Object.keys(result.rows[0] || {}).join(',');
+    // [FIX #5] 빈 테이블 엣지케이스 처리
+    if (result.rows.length === 0) {
+      res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+      res.setHeader('Content-Disposition', 'attachment; filename="responses.csv"');
+      return res.send('\uFEFF데이터 없음\n');
+    }
+
+    const headers = Object.keys(result.rows[0]).join(',');
     const rows = result.rows.map(r =>
       Object.values(r).map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')
     );
@@ -256,7 +302,7 @@ app.get('/api/responses', async (req, res) => {
   }
 });
 
-// ── 관리자 대시보드 (정적 HTML 서빙) ─────────────────────────
+// ── 관리자 대시보드 ───────────────────────────────────────────
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'admin.html'));
 });
