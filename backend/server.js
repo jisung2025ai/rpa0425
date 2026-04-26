@@ -307,9 +307,14 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'admin.html'));
 });
 
+// ── 프론트엔드 정적 파일 서빙 ────────────────────────────────
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
+
 // ── 헬스체크 ─────────────────────────────────────────────────
 app.get('/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
-app.get('/', (req, res) => res.json({ service: 'RPA0425 Workshop API', status: 'running' }));
+
+// ── 루트: 프론트엔드로 리다이렉트 ───────────────────────────
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html')));
 
 // ── 서버 시작 ─────────────────────────────────────────────────
 initDB().then(() => {
